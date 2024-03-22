@@ -30,7 +30,7 @@ pipeline {
                 sh "mv target/hello-1.0.war target/boxfuse-sample-java-war-hello.war"
             }
         }
-        stage("Deploy to Dev") {
+        stage("Deploy to DEV-ENVI") {
             when {
                 expression { params.BRANCH_NAME == 'fe/dev' }
             }
@@ -38,7 +38,7 @@ pipeline {
                 deployToTomcat('65.2.179.142', 'tomcat', 'tomcat', 'http://65.2.179.142:8080/manager/text', '/boxfuse-sample-java-war-hello', 'Dev')
             }
         }
-        stage("Deploy to QA") {
+        stage("Deploy to QA-ENVI") {
             when {
                 expression { params.BRANCH_NAME == 'fe/qa' }
             }
@@ -46,7 +46,7 @@ pipeline {
                 deployToTomcat('13.201.11.12', 'tomcat', 'tomcat', 'http://13.201.11.12:8080/manager/text', '/boxfuse-sample-java-war-hello', 'QA')
             }
         }
-        stage("Deploy to Prod") {
+        stage("Deploy to PROD-ENVI") {
             when {
                 expression { params.BRANCH_NAME == 'master' }
             }
