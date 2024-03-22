@@ -3,7 +3,7 @@ pipeline {
     parameters {
   choice(
     name: 'PARAMETER_NAME', // Name of the parameter to be displayed
-    choices: ['DEV-ENVI', 'QA-ENVI', 'PROD-ENVI'], // List of available choices
+    choices: ['fe/dev', 'fe/qa', 'master'], // List of available choices
     description: 'Specify the branch name to deploy', // Optional description of the parameter
   )
 }
