@@ -13,8 +13,8 @@ pipeline {
             steps {
                 script {
                     // Checkout the specified branch
-                    def branchName = params.BRANCH_NAME
-                    checkout([$class: 'GitSCM', branches: [[name: branchName]], userRemoteConfigs: [[url: 'https://github.com/bchandan9898/boxfuse-sample-java-war-hello.git']]])
+                    def parameterName = params.PARAMETER_NAME
+                    checkout([$class: 'GitSCM', parameters: [[name: parameterName]], userRemoteConfigs: [[url: 'https://github.com/bchandan9898/boxfuse-sample-java-war-hello.git']]])
                 }
             }
          }
@@ -27,7 +27,7 @@ pipeline {
         }
         stage("Deploy to DEV-ENVI") {
             when {
-                expression { params.BRANCH_NAME == 'fe/dev' }
+                expression { params.PARAMETER_NAME == 'fe/dev' }
             }
             steps {
                 deployToTomcat('65.2.179.142', 'tomcat', 'tomcat', 'http://65.2.179.142:8080/manager/text', '/boxfuse-sample-java-war-hello', 'DEV-ENVI')
@@ -35,7 +35,7 @@ pipeline {
         }
         stage("Deploy to QA-ENVI") {
             when {
-                expression { params.BRANCH_NAME == 'fe/qa' }
+                expression { params.PARAMETER_NAME == 'fe/qa' }
             }
             steps {
                 deployToTomcat('13.201.11.12', 'tomcat', 'tomcat', 'http://13.201.11.12:8080/manager/text', '/boxfuse-sample-java-war-hello', 'QA-ENVI')
@@ -43,16 +43,16 @@ pipeline {
         }
         stage("Deploy to PROD-ENVI") {
             when {
-                expression { params.BRANCH_NAME == 'master' }
+                expression { params.PARAMETER_NAME == 'master' }
             }
             steps {
-                input(message: "Do you want to proceed to PROD?", ok: "Proceed") // Approval step
+                input(message: "Do you want to proceed to PROD-ENVI?", ok: "Proceed") // Approval step
 
-                // Deploy to PROD server after approval
+                // Deploy to PROD-ENVI server after approval
                 deployToTomcat('13.232.93.117', 'tomcat', 'tomcat', 'http://13.232.93.117:8080/manager/text', '/boxfuse-sample-java-war-hello', 'PROD-ENVI')
                 
                 // Send Slack notification
-                slackSend(channel: '7-30am-cloud-devops-batch', message: "Deployment to PROD has been approved by manager.")
+                slackSend(channel: '7-30am-cloud-devops-batch', message: "Deployment to PROD-ENVI has been approved by manager.")
             }
         }
     }
